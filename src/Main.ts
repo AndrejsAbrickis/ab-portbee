@@ -1,18 +1,10 @@
 import "dotenv/config";
 import { DataFetcher } from "./services/DataFetcher";
-import { DataStore } from "./services/DataStore";
 
-const vessels = await DataFetcher.fetchVessels();
-DataStore.storeInFile(
-  JSON.stringify({ updatedDate: new Date().toISOString(), vessels }),
-  "vessels.json",
-);
+const shouldFetch = process.argv.includes("--fetch");
 
-vessels.forEach(async (vessel) => {
-  const schedule = await DataFetcher.fetchSchedules(vessel);
-
-  DataStore.storeInFile(
-    JSON.stringify({ updatedDate: new Date().toISOString(), schedule }),
-    `schedule/${vessel.imo}.json`,
-  );
-});
+if (shouldFetch) {
+  await DataFetcher.fetchAllAndStore();
+} else {
+  console.log("Skipping data fetching");
+}

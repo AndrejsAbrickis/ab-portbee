@@ -6,3 +6,4 @@
 1. Install node dependencies by running `yarn`
 2. Set `API_URL` in `.env` file
 3. Run `yarn start` in terminal 
+    * pass `--fetch` parameter to fetch and cache data locally
