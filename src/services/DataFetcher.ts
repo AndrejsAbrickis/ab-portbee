@@ -7,4 +7,8 @@ export class DataFetcher {
   static fetchVessels(): Promise<Vessel[]> {
     return Http.get(useApiEndpoint(Endpoint.vessels));
   }
+
+  static fetchSchedules(vessel: Vessel): Promise<Vessel[]> {
+    return Http.get(useApiEndpoint(Endpoint.schedule, vessel.imo));
+  }
 }

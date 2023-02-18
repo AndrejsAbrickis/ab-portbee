@@ -1,5 +1,5 @@
 ## Requirements
-* node v18
+* node v18 (required to use the node's fetch API)
 * yarn v1
 
 ## Running the program
