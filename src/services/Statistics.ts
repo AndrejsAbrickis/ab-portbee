@@ -59,25 +59,25 @@ export class Statistics {
     );
   }
 
-  get sortedWithPercentiles() {
-    return this.#sortedByPortCalls.map((port) => ({
-      port: this.ports.get(port![0]),
-      portCalls: port![1],
-      p5: quantile(port![1], 0.05),
-      p20: quantile(port![1], 0.2),
-      p50: quantile(port![1], 0.5),
-      p75: quantile(port![1], 0.75),
-      p90: quantile(port![1], 0.9),
+  get #sortedWithPercentiles() {
+    return this.#sortedByPortCalls.map(([portId, portCalls]) => ({
+      port: this.ports.get(portId),
+      portCalls,
+      p5: quantile(portCalls, 0.05),
+      p20: quantile(portCalls, 0.2),
+      p50: quantile(portCalls, 0.5),
+      p75: quantile(portCalls, 0.75),
+      p90: quantile(portCalls, 0.9),
     }));
   }
 
   get top() {
     return [
-      this.sortedWithPercentiles.at(0),
-      this.sortedWithPercentiles.at(1),
-      this.sortedWithPercentiles.at(2),
-      this.sortedWithPercentiles.at(3),
-      this.sortedWithPercentiles.at(4),
+      this.#sortedWithPercentiles.at(0),
+      this.#sortedWithPercentiles.at(1),
+      this.#sortedWithPercentiles.at(2),
+      this.#sortedWithPercentiles.at(3),
+      this.#sortedWithPercentiles.at(4),
     ]
       .filter(Boolean)
       .map((p) => ({
@@ -88,11 +88,11 @@ export class Statistics {
 
   get bottom() {
     return [
-      this.sortedWithPercentiles.at(-1),
-      this.sortedWithPercentiles.at(-2),
-      this.sortedWithPercentiles.at(-3),
-      this.sortedWithPercentiles.at(-4),
-      this.sortedWithPercentiles.at(-5),
+      this.#sortedWithPercentiles.at(-1),
+      this.#sortedWithPercentiles.at(-2),
+      this.#sortedWithPercentiles.at(-3),
+      this.#sortedWithPercentiles.at(-4),
+      this.#sortedWithPercentiles.at(-5),
     ]
       .filter(Boolean)
       .map((p) => ({
@@ -102,14 +102,14 @@ export class Statistics {
   }
 
   get all() {
-    return this.sortedWithPercentiles.map((p) => ({
-      portName: p?.port.name,
-      portCallCount: p?.portCalls.length,
-      durationP5: prettyMilliseconds(p.p5 ?? 0),
-      durationP20: prettyMilliseconds(p.p20 ?? 0),
-      durationP50: prettyMilliseconds(p.p50 ?? 0),
-      durationP75: prettyMilliseconds(p.p75 ?? 0),
-      durationP90: prettyMilliseconds(p.p90 ?? 0),
+    return this.#sortedWithPercentiles.map((portCallStats) => ({
+      portName: portCallStats.port.name,
+      portCallCount: portCallStats.portCalls.length,
+      durationP5: prettyMilliseconds(portCallStats.p5 ?? 0),
+      durationP20: prettyMilliseconds(portCallStats.p20 ?? 0),
+      durationP50: prettyMilliseconds(portCallStats.p50 ?? 0),
+      durationP75: prettyMilliseconds(portCallStats.p75 ?? 0),
+      durationP90: prettyMilliseconds(portCallStats.p90 ?? 0),
     }));
   }
 }

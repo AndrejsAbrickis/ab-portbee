@@ -1,14 +1,18 @@
 import { existsSync, mkdirSync, readdirSync, readFileSync } from "fs";
 import { writeFile } from "fs/promises";
 import { dirname, join } from "path";
+import { dataDirPath } from "../configs/AppConfig";
 
 export class FileSystem {
-  static save(path: string, data: string): Promise<void> {
-    if (!existsSync(path)) {
-      mkdirSync(dirname(path), { recursive: true });
+  static save(fileName: string, data: string): Promise<void> {
+    const filePath = join(dataDirPath, fileName);
+    const dirPath = dirname(filePath);
+
+    if (!existsSync(dirPath)) {
+      mkdirSync(dirPath, { recursive: true });
     }
 
-    return writeFile(path, data);
+    return writeFile(filePath, data);
   }
 
   static getFilesInDir(dirPath: string): string[] {
