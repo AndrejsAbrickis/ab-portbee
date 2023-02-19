@@ -1,7 +1,6 @@
 import { Endpoint } from "../configs/ApiConfig";
 import { Http } from "../infrastructure/Http";
-import { Schedule } from "../model/Schedule";
-import { Vessel } from "../model/Vessel";
+import { Schedule, Vessel } from "../model/Types";
 import { useApiEndpoint } from "../utils/ApiUtils";
 import { DataStore } from "./DataStore";
 

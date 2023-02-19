@@ -3,6 +3,7 @@ import { cwd } from "process";
 
 const appRootDir = cwd();
 const dataDir = "data";
-const scheduleDirPath = join(appRootDir, dataDir, "schedule");
+const dataDirPath = join(appRootDir, dataDir);
+const scheduleDirPath = join(dataDirPath, "schedule");
 
 export { appRootDir, dataDir, scheduleDirPath };

@@ -1,10 +1,8 @@
 import { quantile } from "d3-array";
-import { readdirSync, readFileSync } from "fs";
-import { join } from "path";
 import prettyMilliseconds from "pretty-ms";
 import { scheduleDirPath } from "../configs/AppConfig";
-import { PortCall } from "../model/PortCall";
-import { Schedule } from "../model/Schedule";
+import { FileSystem } from "../infrastructure/FileSystem";
+import { PortCall, Schedule } from "../model/Types";
 
 export class Statistics {
   ports = new Map();
@@ -14,10 +12,10 @@ export class Statistics {
     this.#generate();
   }
 
-  #generate() {
-    const portCalls = Array.from(this.#getPortCalls().values());
+  async #generate() {
+    const portCalls = Array.from(this.#getPortCalls().values()).flat();
 
-    portCalls.flat().forEach((portCall) => {
+    portCalls.forEach((portCall) => {
       if (portCall.isOmitted) {
         return;
       }
@@ -38,10 +36,10 @@ export class Statistics {
 
   #getPortCalls(): Map<number, PortCall[]> {
     const portCalls: Map<number, PortCall[]> = new Map();
-    const scheduleFiles = readdirSync(scheduleDirPath);
+    const scheduleFiles = FileSystem.getFilesInDir(scheduleDirPath);
 
-    scheduleFiles.forEach((file) => {
-      const data = readFileSync(join(scheduleDirPath, file), "utf8");
+    scheduleFiles.forEach(async (file) => {
+      const data = FileSystem.getFileContentString(scheduleDirPath, file);
       const { schedule }: { updatedDate: string; schedule: Schedule } =
         JSON.parse(data);
 
@@ -55,14 +53,14 @@ export class Statistics {
     return new Date(departure).getTime() - new Date(arrival).getTime();
   }
 
-  get sortedByPortCalls() {
+  get #sortedByPortCalls() {
     return [...this.portsStatistics.entries()].sort(
       ([_aKey, aValue], [_bKey, bValue]) => bValue.length - aValue.length,
     );
   }
 
   get sortedWithPercentiles() {
-    return this.sortedByPortCalls.map((port) => ({
+    return this.#sortedByPortCalls.map((port) => ({
       port: this.ports.get(port![0]),
       portCalls: port![1],
       p5: quantile(port![1], 0.05),
