@@ -11,3 +11,6 @@
     * ⬆️ Top five ports with the most port calls
     * ⬇️ Bottom five ports with the fewest port calls
     * 🏗️ Port calls by Port and the P5, P20, P50, P75 and P90 percentiles of Port call durations
+
+## Example of program's CLI output
+![](https://github.com/AndrejsAbrickis/ab-portbee/blob/main/.github/assets/Screenshot%202023-02-19%20at%2012.00.47.png?raw=true)
