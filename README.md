@@ -4,7 +4,10 @@
 
 ## Running the program from a terminal
 1. Install node dependencies by running `yarn`
-2. Set `API_URL` in `.env` file
+2. Set `API_URL` in `.env` file. You can execute the following script in the terminal by replacing the `{API_DOMAIN}` with real API domain URL
+    ```bash
+    echo API_URL={API_DOMAIN}/api/v2 > .env 
+    ```
 3. Run `yarn start` in terminal 
     * pass `--fetch` parameter to fetch and cache data locally
 4. See the following statistics in the terminal
